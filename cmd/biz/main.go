@@ -7,14 +7,14 @@ import (
 	"os"
 	sig "os/signal"
 	"syscall"
-	"talktostrangers/cmd/biz/json-rpc/server"
+	server "talktostrangers/cmd/biz/json-rpc"
 
 	log "github.com/pion/ion-log"
 	"github.com/spf13/viper"
 )
 
 var (
-	conf server.Config
+	conf server.SignalServer
 	file string
 )
 
@@ -47,7 +47,7 @@ func load() bool {
 		return false
 	}
 
-	if !unmarshal(&conf) || !unmarshal(&conf.Config) {
+	if !unmarshal(&conf) || !unmarshal(&conf) {
 		return false
 	}
 	if err != nil {
@@ -80,15 +80,12 @@ func main() {
 		showHelp()
 		os.Exit(-1)
 	}
-	log.Init(conf.Log.Level)
-
-	log.Infof("--- starting biz node ---")
-	s := server.NewServer(conf)
+	s := server.NewServer(conf.Config)
 	if err := s.Start(); err != nil {
 		log.Errorf("biz start error: %v", err)
 		os.Exit(-1)
 	}
-	defer s.Close()
+	// defer s.Close()
 
 	// Press Ctrl+C to exit the process
 	ch := make(chan os.Signal, 1)

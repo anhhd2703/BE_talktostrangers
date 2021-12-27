@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -9,7 +10,7 @@ import (
 )
 
 type SignalServer struct {
-	config signalConf
+	Config signalConf `mapstructure:"signal"`
 	Router *http.ServeMux
 }
 
@@ -20,36 +21,38 @@ type signalConf struct {
 
 func NewServer(config signalConf) *SignalServer {
 	return &SignalServer{
-		config: config,
+		Config: config,
 	}
 }
 
-func (s *SignalServer) Start() {
+func (s *SignalServer) Start() error {
 
 	// use gorilla mux to middle ware
 	//Use the default DefaultServeMux.
-	mux := http.NewServeMux()
+	fmt.Println(s.Config)
+	s.Router = http.NewServeMux()
+	s.initializeRoutes()
 	myHttp := &http.Server{
-		Addr:           s.config.Host + ":" + strconv.Itoa(s.config.Port),
+		Addr:           s.Config.Host + ":" + strconv.Itoa(s.Config.Port),
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
+		Handler:        s.Router,
 	}
-	myHttp.ListenAndServe()
-	s.Router = mux
+	err := myHttp.ListenAndServe()
+	return err
 }
 
 func (s *SignalServer) initializeRoutes() {
 	// verify sdk
-	s.Router.Handle("/", CreateNodeHandler())
+	s.Router.Handle("/alo", CreateNodeHandler())
 }
 func CreateNodeHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
+		if r.Method != http.MethodGet {
 			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 			return
 		}
-		// close resp.Body()
 		sendJSON(w, "data", nil)
 	})
 }
