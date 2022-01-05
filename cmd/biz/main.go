@@ -9,7 +9,8 @@ import (
 	"syscall"
 	server "talktostrangers/cmd/biz/json-rpc"
 
-	log "github.com/pion/ion-log"
+	log "talktostrangers/pkg/log"
+
 	"github.com/spf13/viper"
 )
 
@@ -47,7 +48,7 @@ func load() bool {
 		return false
 	}
 
-	if !unmarshal(&conf) || !unmarshal(&conf) {
+	if !unmarshal(&conf) || !unmarshal(&conf.Config.SignalConnect) {
 		return false
 	}
 	if err != nil {
@@ -80,6 +81,7 @@ func main() {
 		showHelp()
 		os.Exit(-1)
 	}
+	log.Init(conf.Config.Log.Level)
 	s := server.NewServer(conf.Config)
 	if err := s.Start(); err != nil {
 		log.Errorf("biz start error: %v", err)

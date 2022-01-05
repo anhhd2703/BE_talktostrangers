@@ -84,6 +84,32 @@ func (r *Redis) Set(k, v string, t time.Duration) error {
 	return r.single.Set(k, v, t).Err()
 }
 
+func (r *Redis) Pub(k, v string) error {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	if r.clusterMode {
+		return r.cluster.Publish(k, v).Err()
+	}
+	return r.single.Publish(k, v).Err()
+}
+func (r *Redis) Sub(k string) *redis.PubSub {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	if r.clusterMode {
+		return r.cluster.Subscribe(k)
+	}
+	return r.single.Subscribe(k)
+}
+
+func (r *Redis) Rename(key, newkey string) error {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+	if r.clusterMode {
+		return r.cluster.Rename(key, newkey).Err()
+	}
+	return r.single.Rename(key, newkey).Err()
+}
+
 func (r *Redis) Get(k string) interface{} {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()

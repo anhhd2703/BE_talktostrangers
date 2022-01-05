@@ -62,7 +62,7 @@ require (
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/rs/cors v1.7.0 // indirect
-	github.com/rs/zerolog v1.26.0 // indirect
+	github.com/rs/zerolog v1.26.0
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/afero v1.6.0 // indirect
 	github.com/spf13/cast v1.4.1 // indirect
