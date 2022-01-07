@@ -8,6 +8,8 @@ import (
 	"talktostrangers/pkg/biz"
 	db "talktostrangers/pkg/db/model"
 	"time"
+
+	"github.com/rs/cors"
 )
 
 type SignalServer struct {
@@ -53,12 +55,17 @@ func (s *SignalServer) Start() error {
 	fmt.Println(s.Config)
 	s.Router = http.NewServeMux()
 	s.initializeRoutes()
+
+	c := cors.New(cors.Options{
+		AllowedMethods: []string{"POST", "GET"},
+	})
+	c.Handler(s.Router)
 	myHttp := &http.Server{
 		Addr:           s.Config.Host + ":" + strconv.Itoa(s.Config.Port),
 		ReadTimeout:    30 * time.Second,
 		WriteTimeout:   30 * time.Second,
 		MaxHeaderBytes: 1 << 20,
-		Handler:        s.Router,
+		Handler:        c.Handler(s.Router),
 	}
 	err := myHttp.ListenAndServe()
 	return err

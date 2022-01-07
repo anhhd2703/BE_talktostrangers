@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	log "talktostrangers/pkg/log"
 	"talktostrangers/proto"
@@ -33,6 +34,7 @@ func GetRooomHandler(wh *WareHouse) http.Handler {
 			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 			return
 		}
+		fmt.Println("==============>")
 		ctx := context.Background()
 		// 		//Derive a context with cancel
 		ctxWithCancel, cancelFunction := context.WithTimeout(ctx, 15*time.Second)
