@@ -9,10 +9,10 @@ import (
 	_ "net/http/pprof"
 	"os"
 
-	"github.com/pion/ion-sfu/cmd/signal/grpc/server"
-	"github.com/pion/ion-sfu/pkg/middlewares/datachannel"
+	"talktostrangers/cmd/sfu/signal/grpc/server"
 
 	log "github.com/pion/ion-sfu/pkg/logger"
+	"github.com/pion/ion-sfu/pkg/middlewares/datachannel"
 	"github.com/pion/ion-sfu/pkg/sfu"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/viper"
@@ -185,7 +185,6 @@ func main() {
 	nsfu := sfu.NewSFU(conf.Config)
 	dc := nsfu.NewDatachannel(sfu.APIChannelLabel)
 	dc.Use(datachannel.SubscriberAPI)
-
 	err := server.WrapperedGRPCWebServe(nsfu, addr, cert, key)
 	if err != nil {
 		logger.Error(err, "failed to serve SFU")

@@ -9,8 +9,9 @@ import (
 	_ "net/http/pprof"
 	"os"
 
+	"talktostrangers/cmd/sfu/signal/json-rpc/server"
+
 	"github.com/gorilla/websocket"
-	"github.com/pion/ion-sfu/cmd/signal/json-rpc/server"
 	log "github.com/pion/ion-sfu/pkg/logger"
 	"github.com/pion/ion-sfu/pkg/middlewares/datachannel"
 	"github.com/pion/ion-sfu/pkg/sfu"
@@ -154,8 +155,8 @@ func main() {
 	sfu.Logger = logger
 	s := sfu.NewSFU(conf)
 	dc := s.NewDatachannel(sfu.APIChannelLabel)
-	dc.Use(datachannel.SubscriberAPI)
 
+	dc.Use(datachannel.SubscriberAPI)
 	upgrader := websocket.Upgrader{
 		CheckOrigin: func(r *http.Request) bool {
 			return true

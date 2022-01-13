@@ -53,3 +53,14 @@ echo "-------------build sfu----------"
 echo "go build -o $COMMAND2"
 cd $APP_DIR/cmd/$EXE2/signal/allrpc
 go build -o $COMMAND2
+
+
+# cd $APP_DIR
+# echo "------------tar biz-----------"
+# tar cvzf biz.tar.gz bin/biz configs/biz.toml configs/cert.pem configs/key.pem scripts/bizStart.sh scripts/bizStop.sh
+
+# echo "------------tar sfu-----------"
+# tar cvzf sfu.tar.gz bin/sfu configs/sfu.toml configs/cert.pem configs/key.pem scripts/sfuStart.sh scripts/sfuStop.sh
+
+# echo "------------tar islb-----------"
+# tar cvzf islb.tar.gz bin/islb configs/islb.toml configs/cert.pem configs/key.pem scripts/islbStart.sh scripts/islbStop.sh
