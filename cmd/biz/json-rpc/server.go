@@ -72,5 +72,5 @@ func (s *SignalServer) Start() error {
 }
 
 func (s *SignalServer) initializeRoutes() {
-	s.Router.Handle("/room", biz.GetRooomHandler(s.WareHouse))
+	s.Router.Handle("/api/room", biz.GetRooomHandler(s.WareHouse))
 }
